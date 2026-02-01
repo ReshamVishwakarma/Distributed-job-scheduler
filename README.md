@@ -17,5 +17,10 @@ and worker-based execution.
 - Celery
 - Docker
 
+## High-Level Architecture
+
+Client → API → Database → Queue → Worker
+
+
 ## Status
 🚧 Project in active development.
