@@ -15,3 +15,14 @@ Main components:
 - Database
 - Queue
 - Workers
+
+
+## Day 1 Progress
+- Set up FastAPI project structure
+- Added health check endpoint
+- Implemented job creation API
+- Implemented job status retrieval API
+- Currently using in-memory storage for jobs
+
+Next:
+- Replace in-memory storage with PostgreSQL

@@ -23,4 +23,7 @@ Client → API → Database → Queue → Worker
 
 
 ## Status
-🚧 Project in active development.
+🚧 Day 1 completed: FastAPI setup and basic job APIs implemented.
+
+(Current implementation uses in-memory storage; persistence will be added using PostgreSQL.)
+
