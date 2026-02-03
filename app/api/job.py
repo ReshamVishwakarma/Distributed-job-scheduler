@@ -1,33 +1,30 @@
-from fastapi import APIRouter, HTTPException
-from app.models.job import Job
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from uuid import uuid4
+
 from app.schemas.job import JobCreate, JobResponse
+from app.models.job import Job, JobStatus
+from app.db.deps import get_db
 
 router = APIRouter()
 
-# Temporary in-memory store
-jobs_store = {}
-
 @router.post("/jobs", response_model=JobResponse)
-def create_job(job: JobCreate):
-    new_job = Job(job_type=job.job_type, payload=job.payload)
-    jobs_store[new_job.id] = new_job
-
-    return JobResponse(
-        id=new_job.id,
-        job_type=new_job.job_type,
-        payload=new_job.payload,
-        status=new_job.status
-    )
-
-@router.get("/jobs/{job_id}", response_model=JobResponse)
-def get_job(job_id: str):
-    job = jobs_store.get(job_id)
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-
-    return JobResponse(
-        id=job.id,
+def create_job(job: JobCreate, db: Session = Depends(get_db)):
+    new_job = Job(
+        id=str(uuid4()),
         job_type=job.job_type,
         payload=job.payload,
-        status=job.status
+        status=JobStatus.PENDING
     )
+    db.add(new_job)
+    db.commit()
+    db.refresh(new_job)
+    return new_job
+
+
+@router.get("/jobs/{job_id}", response_model=JobResponse)
+def get_job(job_id: str, db: Session = Depends(get_db)):
+    job = db.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return job

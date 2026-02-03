@@ -26,3 +26,16 @@ Main components:
 
 Next:
 - Replace in-memory storage with PostgreSQL
+
+## Day 2 Progress
+- Integrated PostgreSQL as persistent storage
+- Added SQLAlchemy ORM setup
+- Created jobs table automatically on application startup
+- Replaced in-memory job storage with database-backed storage
+- Verified persistence by restarting server and fetching existing jobs
+
+Key Learnings:
+- PostgreSQL permissions (database vs schema)
+- Importance of Base.metadata.create_all()
+- Model import order in SQLAlchemy
+- FastAPI startup lifecycle

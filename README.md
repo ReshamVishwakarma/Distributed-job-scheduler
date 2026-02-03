@@ -27,3 +27,4 @@ Client → API → Database → Queue → Worker
 
 (Current implementation uses in-memory storage; persistence will be added using PostgreSQL.)
 
+🚧 Day 2 completed: Job persistence implemented using PostgreSQL and SQLAlchemy.
