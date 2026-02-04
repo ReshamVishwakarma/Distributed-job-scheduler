@@ -39,3 +39,6 @@ Key Learnings:
 - Importance of Base.metadata.create_all()
 - Model import order in SQLAlchemy
 - FastAPI startup lifecycle
+
+## Day 3 Progress
+- Celery
