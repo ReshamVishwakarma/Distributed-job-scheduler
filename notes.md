@@ -41,4 +41,15 @@ Key Learnings:
 - FastAPI startup lifecycle
 
 ## Day 3 Progress
-- Celery
+- Integrated Redis as a message broker
+- Added Celery for background task execution
+- Implemented worker-based job processing
+- Connected API to async workers using task queues
+- Verified end-to-end async execution and status updates
+
+Key Learnings:
+- Queue-based asynchronous system design
+- Celery task registration and discovery
+- Redis as a broker between API and workers
+- Debugging unregistered Celery tasks
+- Decoupling API layer from execution layer

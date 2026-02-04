@@ -17,9 +17,8 @@ and worker-based execution.
 - Celery
 - Docker
 
-## High-Level Architecture
-
-Client → API → Database → Queue → Worker
+## Architecture Overview
+Client → FastAPI API → PostgreSQL → Redis Queue → Celery Workers → PostgreSQL
 
 
 ## Status
@@ -28,3 +27,5 @@ Client → API → Database → Queue → Worker
 (Current implementation uses in-memory storage; persistence will be added using PostgreSQL.)
 
 🚧 Day 2 completed: Job persistence implemented using PostgreSQL and SQLAlchemy.
+
+🚧 Day 3 completed: Asynchronous job execution implemented using Redis and Celery workers.
