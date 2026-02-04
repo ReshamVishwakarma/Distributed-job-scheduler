@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from uuid import uuid4
 
+from app.workers.tasks import execute_job
 from app.schemas.job import JobCreate, JobResponse
 from app.models.job import Job, JobStatus
 from app.db.deps import get_db
@@ -16,10 +17,18 @@ def create_job(job: JobCreate, db: Session = Depends(get_db)):
         payload=job.payload,
         status=JobStatus.PENDING
     )
+
+    # 1. Save job to DB
     db.add(new_job)
     db.commit()
     db.refresh(new_job)
+
+    # 2. Send job to Celery worker (NEW)
+    execute_job.delay(new_job.id)
+
+    # 3. Return immediately
     return new_job
+
 
 
 @router.get("/jobs/{job_id}", response_model=JobResponse)
