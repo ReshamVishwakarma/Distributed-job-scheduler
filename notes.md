@@ -53,3 +53,10 @@ Key Learnings:
 - Redis as a broker between API and workers
 - Debugging unregistered Celery tasks
 - Decoupling API layer from execution layer
+
+## Day 4 Progress
+- Added retry strategies with backoff
+- Implemented idempotent job execution
+- Improved failure handling and error visibility
+- Strengthened job state transitions for reliability
+
