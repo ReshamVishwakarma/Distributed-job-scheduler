@@ -4,7 +4,7 @@ from app.db.database import SessionLocal
 from app.models.job import Job, JobStatus
 
 
-@celery_app.task(bind=True, autoretry_for=(Exception,), retry_kwargs={"max_retries": 3, "countdown": 5})
+@celery_app.task(bind=True, autoretry_for=(Exception,), retry_backoff=5, retry_jitter=True, retry_kwargs={"max_retries": 3})
 def execute_job(self, job_id: str):
     db = SessionLocal()
     try:
