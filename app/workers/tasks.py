@@ -11,6 +11,10 @@ def execute_job(self, job_id: str):
         job = db.query(Job).filter(Job.id == job_id).first()
         if not job:
             return "Job not found"
+        
+        # 🔐 Idempotency guard
+        if job.status in (JobStatus.SUCCESS, JobStatus.RUNNING):
+            return f"Job already {job.status}"
 
         job.status = JobStatus.RUNNING
         db.commit()
