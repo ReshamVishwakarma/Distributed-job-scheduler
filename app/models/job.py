@@ -2,6 +2,8 @@ from sqlalchemy import Column, String, JSON, DateTime
 from sqlalchemy.sql import func
 from app.db.database import Base
 from enum import Enum
+from sqlalchemy import Column, String, DateTime
+from datetime import datetime
 
 class JobStatus(str, Enum):
     PENDING = "PENDING"
@@ -15,11 +17,8 @@ class Job(Base):
     id = Column(String, primary_key=True, index=True)
     job_type = Column(String, index=True)
     payload = Column(JSON)
-    status = Column(String, default=JobStatus.PENDING)
+    status = Column(String)
+    priority = Column(String, default="default")   # NEW
+    run_at = Column(DateTime, nullable=True)        # NEW
     error_message = Column(String, nullable=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-    )
+    created_at = Column(DateTime, default=datetime.utcnow)
