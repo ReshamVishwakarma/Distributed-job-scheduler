@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: jobs_postgres
+    environment:
+      POSTGRES_DB: jobs_db
+      POSTGRES_USER: jobs_user
+      POSTGRES_PASSWORD: jobs_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: jobs_redis
+
+  api:
+    build: .
+    container_name: jobs_api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql://jobs_user:jobs_pass@postgres:5432/jobs_db
+      REDIS_URL: redis://redis:6379/0
+
+  worker:
+    build: .
+    container_name: jobs_worker
+    command: celery -A app.workers.celery_app worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql://jobs_user:jobs_pass@postgres:5432/jobs_db
+      REDIS_URL: redis://redis:6379/0
+
+volumes:
+  postgres_data:
