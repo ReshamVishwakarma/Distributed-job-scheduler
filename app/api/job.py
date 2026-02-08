@@ -23,8 +23,14 @@ def create_job(job: JobCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_job)
 
-    # 2. Send job to Celery worker (NEW)
-    execute_job.delay(new_job.id)
+    # 2. Send job to Celery worker (NEW) - priority routing
+    queue = new_job.priority
+    execute_job.apply_async(
+        args=[new_job.id],
+        queue=queue,
+        eta=new_job.run_at
+    )
+
 
     # 3. Return immediately
     return new_job
