@@ -60,3 +60,16 @@ Key Learnings:
 - Improved failure handling and error visibility
 - Strengthened job state transitions for reliability
 
+## Day 5A – Dockerization
+
+- Dockerized the complete distributed job scheduler
+- Created a single Docker image for API and Celery worker
+- Used Docker Compose to orchestrate:
+  - FastAPI service
+  - Celery worker
+  - Redis broker
+  - PostgreSQL database
+- Configured environment-based DATABASE_URL and REDIS_URL
+- Removed host port bindings for Redis and PostgreSQL to avoid local conflicts
+- Fixed missing runtime dependencies by adding Celery and Redis to requirements.txt
+- Verified end-to-end async job execution inside Docker containers
