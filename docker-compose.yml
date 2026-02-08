@@ -8,6 +8,12 @@ services:
       POSTGRES_PASSWORD: jobs_pass
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jobs_user -d jobs_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 
   redis:
     image: redis:7
@@ -22,8 +28,11 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
     environment:
       DATABASE_URL: postgresql://jobs_user:jobs_pass@postgres:5432/jobs_db
       REDIS_URL: redis://redis:6379/0
