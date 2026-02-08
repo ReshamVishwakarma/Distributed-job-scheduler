@@ -25,6 +25,16 @@ Client → FastAPI API → PostgreSQL → Redis Queue → Celery Workers → Pos
 - PostgreSQL is used for durable job state storage
 - Redis and PostgreSQL are not exposed to the host and communicate over Docker’s internal network
 - The worker is idempotent and supports retries with exponential backoff
+- Jobs are routed to different queues based on priority
+- Scheduled jobs are executed using ETA-based task delivery
+
+## How It Works
+1. Client submits a job via REST API
+2. Job metadata is stored in PostgreSQL
+3. Job is routed to a Celery queue based on priority
+4. Optional scheduling delays execution until `run_at`
+5. Worker executes the job asynchronously
+6. Job status is updated and can be queried anytime
 
 
 ## Status
@@ -39,6 +49,8 @@ Client → FastAPI API → PostgreSQL → Redis Queue → Celery Workers → Pos
 🚧 Day 4 completed: Reliability improvements with retries, idempotency, and failure handling.
 
 🚧  Day 5A completed: The system is fully dockerized and runs end-to-end using Docker Compose.
+
+🚧 Day 6 completed: Priority-based queues and scheduled job execution implemented.
 
 
 

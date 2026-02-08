@@ -60,7 +60,7 @@ Key Learnings:
 - Improved failure handling and error visibility
 - Strengthened job state transitions for reliability
 
-## Day 5A – Dockerization
+## Day 5 – Dockerization
 
 - Dockerized the complete distributed job scheduler
 - Created a single Docker image for API and Celery worker
@@ -73,3 +73,30 @@ Key Learnings:
 - Removed host port bindings for Redis and PostgreSQL to avoid local conflicts
 - Fixed missing runtime dependencies by adding Celery and Redis to requirements.txt
 - Verified end-to-end async job execution inside Docker containers
+
+## Day 6 – Priority Queues & Scheduling
+
+### What was implemented
+- Added job priority support (high / default / low)
+- Introduced scheduled jobs using `run_at`
+- Configured multiple Celery queues for priority routing
+- Ensured database schema initialization on API startup
+- Fixed Docker startup race conditions between API and PostgreSQL
+- Verified full system stability under Docker Compose
+
+### Key Learnings
+- ORM tables are created only for imported models
+- Schema changes require migrations or DB resets in dev
+- Docker `depends_on` does not guarantee readiness
+- Health checks are required for safe service startup
+- Priority queues prevent starvation of critical jobs
+
+### Engineering Concepts Applied
+- Priority-based workload isolation
+- ETA-based asynchronous scheduling
+- Idempotent background workers
+- Distributed system startup coordination
+- Production-style failure debugging
+
+### Status
+✅ Day 6 complete
